@@ -1,0 +1,10 @@
+# Entradas e saídas mapeadas
+
+# Entradas
+    1 - Distância
+    2 - Tamanho
+    3 - Velocidade
+
+# Saídas
+    1 - Botão para cima
+    2 - Borão para baixa
