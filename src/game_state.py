@@ -1,4 +1,4 @@
-class Game_sate:
+class GameState:
 
     def __init__(self, agent, game):
         self._agent = agent
