@@ -1,18 +1,18 @@
 # Imports Selenium
-import os
+# import os
 import time
 import io
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.keys import Keys  
+from selenium import webdrive
+from selenium.webdriver.common.keys import Keys, Options
 from PIL import Image, ImageFilter
 import numpy as np
 
 '''
-* class Jogo: Classe que irá representar a interface entre o selenium via python e o
-    navegador.
+* class Jogo: Classe que irá representar a interface entre o selenium via python
+ e o navegador.
 * __init__():  Launch the broswer window using the attributes in chrome_options
-* get_crashed() : return true if the agent as crashed on an obstacles. Gets javascript variable from game decribing the state
+* get_crashed() : return true if the agent as crashed on an obstacles. Gets
+javascript variable from game decribing the state
 * get_playing(): true if game in progress, false is crashed or paused
 * restart() : sends a signal to browser-javascript to restart the game
 * press_up(): sends a single to press up get to the browser
@@ -22,6 +22,8 @@ import numpy as np
 * resume(): resume a paused game if not crashed
 * end(): close the browser and end the game
 '''
+
+
 class Jogo:
     def __init__(self, id, conf_customizada: bool = False):
         # definindo as opções
@@ -31,14 +33,17 @@ class Jogo:
         self._driver.get('https://wayou.github.io/t-rex-runner/')
         self._driver.set_window_position(x=-10+500*(id//3), y=(id%3)*300)
         self._driver.set_window_size(200, 300)
-        
+
         # modificando o jogo antes de treinar
         if conf_customizada:
             self._driver.execute_script("Runner.config.ACCELERATION=0")
+
     def get_crashed(self):
         return self._driver.execute_script("return Runner.instance_.crashed")
+
     def get_playing(self):
         return self._driver.execute_script("return Runner.instance_.playing")
+ 
     def get_frames(self):
         
         img1 = Image.open(io.BytesIO(self._driver.get_screenshot_as_png()))
@@ -52,23 +57,34 @@ class Jogo:
         img2 = img2.filter(ImageFilter.FIND_EDGES)
 
         return (img1, img2)
+
     def restart(self):
         self.pause()
         self._driver.execute_script("Runner.instance_.restart()")
+        
     def jump(self):
         self._driver.find_element_by_tag_name("body").send_keys(Keys.SPACE)
+        
     def duck(self):
         self._driver.find_element_by_tag_name("body").send_keys(Keys.ARROW_DOWN)
+        
     def get_score(self):
-        score_array = self._driver.execute_script("return Runner.instance_.distanceMeter.digits")
-        score = ''.join(score_array) # the javascript object is of type array with score in the formate[1,0,0] which is 100.
+        score_array = self._driver.execute_script(
+            "return Runner.instance_.distanceMeter.digits")
+        # the javascript object is of type array with score in the
+        #   formate[1,0,0] which is 100.
+        score = ''.join(score_array)
         return int(score)
+
     def pause(self):
         return self._driver.execute_script("return Runner.instance_.stop()")
+
     def resume(self):
         return self._driver.execute_script("return Runner.instance_.play()")
+
     def end(self):
         self._driver.close()
+
 
 class Agent:
     def __init__(self,game):

@@ -36,4 +36,3 @@ class TestControl:
     def end():
         sortRedes()
         return self.redes[0]
-
