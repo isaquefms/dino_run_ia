@@ -1,48 +1,38 @@
-class GameState:
-
-    def __init__(self, agent, game):
-        self._agent = agent
-        self._game = game
-
-    def get_state(self, actions):
-        score = self._game.get_score()
-        reward = 0.1*score/10  # dynamic reward calculation
-        is_over = False  # game over
-        if actions[1] == 1:  # else do nothing
-            self._agent.jump()
-            reward = 0.1*score/11
-        # Todo: Declarar essa e as demais funções do open_cv
-        image = ''  # grab_screen()
-
-        if self._agent.is_crashed():
-            self._game.restart()
-            reward = -11/score
-            is_over = True
-        return image, reward, is_over  # return the Experience tuple
-
-
 '''
-get_state(): accepts an array of actions,
-             performs the action on the agent
-returns :  new state, reward and if the game ended.
+update(): Recebe um array de ações, retorna o próximo estado e se o jogo acabou
 '''
+def GeraNovaGeração(redes, scores):
+    pass
 
-
-# class Game_sate:
-#     def __init__(self,agent,game):
-#         self._agent = agent
-#         self._game = game
-#     def get_state(self,actions):
-#         score = self._game.get_score()
-#         reward = 0.1*score/10 # dynamic reward calculation
-#         is_over = False #game over
-#         if actions[1] == 1: #else do nothing
-#             self._agent.jump()
-#             reward = 0.1*score/11
-#         image = grab_screen()
-#
-#         if self._agent.is_crashed():
-#             self._game.restart()
-#             reward = -11/score
-#             is_over = True
-#         return image, reward, is_over #return the Experience tuple
+    
+class TestControl:
+    def __init__(self):
+        self.instances = [Agent(Jogo()) for i in range(num_instancias)]
+        self.redes = [pass for i in range(num_instancias)]
+        self.scores = [0 for i in range(num_instancias)]
+    def begin():
+        for agent in instances:
+            agent.jump()
+        self.evaluate()
+        for c in range(max_it):
+            self.nextGen()
+            self.evaluate()
+        self.end()
+    def evaluate():
+        existsAlive = True
+        while session <= timeout and existsAlive:
+            existsAlive = False
+            for i in range(num_instancias):
+                if self.instances[i].alive:
+                    existsAlive = True
+                    out = self.redes[i].process(self.instances[i].update())
+                    self.instances[i].doAction(out)
+        self.scores = [x.getFinalScore() for x in self.instances]
+    def sortRedes():
+        self.redes = [x[0] for x in sorted(zip(self.redes,self.scores), key = lambda x: x[1], reverse=True)]
+    def nextGen():
+        sortRedes()
+        self.redes = GeraNovaGeracao(self.redes.copy(), self.scores)
+    def end():
+        sortRedes()
+        return self.redes[0]
